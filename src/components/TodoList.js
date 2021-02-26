@@ -1,11 +1,19 @@
 import TodoListItem from "./TodoListItem";
 
 function TodoList(props) {
+
+    const allCompleted = props.state.todos.every(t => t.completed);
+
+    function handleToggleAll(e) {
+        props.state.todos.forEach(t => t.completed = !allCompleted);
+        props.setState({ ...props.state });
+    }
+
     return (
         <section class="main">
-            <input class="toggle-all" type="checkbox" />
+            <input id="toggle-all" class="toggle-all" type="checkbox" onChange={handleToggleAll} checked={allCompleted} />
             <ul class="todo-list">
-                {props.todos.map(t => <TodoListItem todo={t} removeTodo={props.removeTodo} toggleTodo={props.toggleTodo}/>)}
+                {props.state.todos.map(t => <TodoListItem todo={t} state={props.state} setState={props.setState} />)}
             </ul>
         </section>
     );

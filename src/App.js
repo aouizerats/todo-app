@@ -7,45 +7,27 @@ import Footer from "./components/Footer";
 import TodoList from "./components/TodoList";
 
 function App() {
-  const [todos, setTodos] = useState([]);
+  const [state, setState] = useState({
+    todos: [],
+    editing: undefined,
+    editText: "",
+  });
 
-  function createTodo(title) {
-    const todo = Todo.create(title);
-    if (todo) {
-      setTodos([...todos, todo]);
-      return true;
-    }
-    return false;
-  }
+  // useEffect(() => {
+  //   async function fetchTodos() {
+  //     await fetch('https://jsonplaceholder.typicode.com/todos')
+  //       .then(response => response.json())
+  //       .then(json => setTodos(json.map(i => new Todo(i.userId, i.id, i.title, i.completed))));
+  //   }
 
-  function removeTodo(todo) {
-    setTodos(todos.filter(t => t != todo));
-  }
-
-  function toggleTodo(todo) {
-    todo.toggle();
-    setTodos([...todos]);
-  }
-
-  function clearCompleted() {
-    setTodos(todos.filter(t => !t.completed));
-  }
-
-  useEffect(() => {
-    async function fetchTodos() {
-      await fetch('https://jsonplaceholder.typicode.com/todos')
-        .then(response => response.json())
-        .then(json => setTodos(json.map(i => new Todo(i.userId, i.id, i.title, i.completed))));
-    }
-
-    fetchTodos();
-  }, []);
+  //   fetchTodos();
+  // }, []);
 
   return (
     <section class="todoapp">
-      <Header title="todos" createTodo={createTodo} />
-      <TodoList todos={todos} removeTodo={removeTodo} toggleTodo={toggleTodo} />
-      <Footer todos={todos} clearCompleted={clearCompleted} />
+      <Header title="todos" state={state} setState={setState} />
+      <TodoList state={state} setState={setState} />
+      <Footer state={state} setState={setState} />
     </section>
   );
 }
