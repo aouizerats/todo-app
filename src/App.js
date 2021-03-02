@@ -13,15 +13,15 @@ function App() {
     editText: "",
   });
 
-  // useEffect(() => {
-  //   async function fetchTodos() {
-  //     await fetch('https://jsonplaceholder.typicode.com/todos')
-  //       .then(response => response.json())
-  //       .then(json => setTodos(json.map(i => new Todo(i.userId, i.id, i.title, i.completed))));
-  //   }
+  useEffect(() => {
+    async function fetchTodos() {
+      await fetch('https://jsonplaceholder.typicode.com/todos')
+        .then(response => response.json())
+        .then(json => setState({ ...state, todos: json.map(i => new Todo(i.userId, i.id, i.title, i.completed)) }));
+    }
 
-  //   fetchTodos();
-  // }, []);
+    fetchTodos();
+  }, []);
 
   return (
     <section class="todoapp">
