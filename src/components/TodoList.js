@@ -1,19 +1,36 @@
 import TodoListItem from "./TodoListItem";
+import { useState } from "react";
 
-function TodoList(props) {
+function TodoList({ todos, removeTodo, submitTodo, toggleAll }) {
 
-    const allCompleted = props.state.todos.every(t => t.completed);
+    const [editing, setEditing] = useState({
+        id: undefined,
+        text: ""
+    });
 
-    function handleToggleAll(e) {
-        props.state.todos.forEach(t => t.completed = !allCompleted);
-        props.setState({ ...props.state });
+    function startEdit(todo) {
+        if (!todo.completed)
+            setEditing({ ...editing, id: todo.id, text: todo.title });
+    }
+
+    function endEdit() {
+        setEditing({ ...editing, id: undefined, text: "" });
+    }
+
+    function updateEdit(text) {
+        setEditing({ ...editing, text: text });
     }
 
     return (
         <section className="main">
-            <input id="toggle-all" className="toggle-all" type="checkbox" onChange={handleToggleAll} checked={allCompleted} />
+            <input id="toggle-all" className="toggle-all" type="checkbox" onChange={toggleAll} checked={todos.every(t => t.completed)} />
             <ul className="todo-list">
-                {props.state.todos.map(t => <TodoListItem key={t.id} todo={t} state={props.state} setState={props.setState} />)}
+                {todos.map(t => <TodoListItem key={t.id} editing={editing} todo={t}
+                    submitTodo={submitTodo}
+                    removeTodo={removeTodo}
+                    startEdit={startEdit}
+                    endEdit={endEdit}
+                    updateEdit={updateEdit} />)}
             </ul>
         </section>
     );

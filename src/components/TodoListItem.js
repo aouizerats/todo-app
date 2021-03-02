@@ -1,14 +1,15 @@
 import classNames from "classnames";
 
-function TodoListItem(props) {
+function TodoListItem({ editing, todo, submitTodo, removeTodo, startEdit, endEdit, updateEdit }) {
 
     function handleSubmit(e) {
-        var val = props.state.editText.trim();
+        var val = editing.text.trim();
         if (val) {
-            props.todo.title = val;
-            props.setState({ ...props.state, editing: undefined, editText: "" });
-        } else if (props.editing) {
-            handleRemove(e);
+            todo.title = val;
+            submitTodo(todo);
+            endEdit();
+        } else if (editing.id) {
+            removeTodo(todo);
         }
     }
 
@@ -18,41 +19,32 @@ function TodoListItem(props) {
         }
 
         if (e.key === 'Escape') {
-            props.setState({ ...props.state, editing: undefined, editText: "" });
+            endEdit();
         }
     }
 
     function handleChange(e) {
-        if (props.state.editing === props.todo.id) {
-            props.setState({ ...props.state, editText: e.target.value });
+        if (editing.id === todo.id) {
+            updateEdit(e.target.value);
         }
     }
 
     function handleToggle(e) {
-        props.todo.toggle();
-        props.setState({ ...props.state });
-    }
-
-    function handleEdit(e) {
-        if (!props.todo.completed)
-            props.setState({ ...props.state, editing: props.todo.id, editText: props.todo.title });
-    }
-
-    function handleRemove(e) {
-        props.setState({ ...props.state, todos: props.state.todos.filter(t => t !== props.todo) });
+        todo.toggle();
+        submitTodo(todo);
     }
 
     return (
         <li className={classNames({
-            completed: props.todo.completed,
-            editing: props.state.editing === props.todo.id,
+            completed: todo.completed,
+            editing: editing.id === todo.id,
         })}>
             <div className="view">
-                <input key={props.todo} className="toggle" type="checkbox" checked={props.todo.completed} onChange={handleToggle} />
-                <label onDoubleClick={handleEdit}>{props.todo.title}</label>
-                <button className="destroy" onClick={handleRemove} />
+                <input key={todo} className="toggle" type="checkbox" checked={todo.completed} onChange={handleToggle} />
+                <label onDoubleClick={() => startEdit(todo)}>{todo.title}</label>
+                <button className="destroy" onClick={() => removeTodo(todo)} />
             </div>
-            <input className="edit" value={props.state.editText} onKeyUp={handleKeyUp} onBlur={handleSubmit} onChange={handleChange} />
+            <input className="edit" value={editing.text} onKeyUp={handleKeyUp} onBlur={handleSubmit} onChange={handleChange} />
         </li>
     );
 }

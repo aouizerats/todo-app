@@ -1,14 +1,9 @@
 
-function Footer(props) {
-
-    function handleClearCompleted(e) {
-        props.setState({...props.state, todos: props.state.todos.filter(t => !t.completed)});
-    }
-
+function Footer({ count, clearCompleted }) {
     return (
         <footer className="footer">
-            <span className="todo-count"><strong>{props.state.todos.length}</strong> items left</span>
-            <button className="clear-completed" onClick={handleClearCompleted}>Clear completed</button>
+            <span className="todo-count"><strong>{count}</strong> items left</span>
+            <button className="clear-completed" onClick={clearCompleted}>Clear completed</button>
         </footer>
     );
 }
