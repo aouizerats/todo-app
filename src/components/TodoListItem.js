@@ -1,14 +1,24 @@
 import classNames from "classnames";
+import { useEffect, useRef, useState } from 'react'
 
-function TodoListItem({ editing, todo, submitTodo, removeTodo, startEdit, endEdit, updateEdit }) {
+function TodoListItem({ todo, removeTodo, editing }) {
+
+    const [reload, setReload] = useState(false);
+    const editor = useRef();
+
+    useEffect(() => {
+        if (editor.current) {
+            editor.current.focus();
+            editor.current.setSelectionRange(0, editor.current.value.length)
+        }
+
+    }, [editing.isEditing(todo)])
 
     function handleSubmit(e) {
-        var val = editing.text.trim();
+        var val = editing.editText.trim();
         if (val) {
-            todo.title = val;
-            submitTodo(todo);
-            endEdit();
-        } else if (editing.id) {
+            editing.endEdit(todo, val);
+        } else if (editing.isEditing(todo)) {
             removeTodo(todo);
         }
     }
@@ -19,32 +29,31 @@ function TodoListItem({ editing, todo, submitTodo, removeTodo, startEdit, endEdi
         }
 
         if (e.key === 'Escape') {
-            endEdit();
-        }
-    }
-
-    function handleChange(e) {
-        if (editing.id === todo.id) {
-            updateEdit(e.target.value);
+            editing.cancelEdit();
         }
     }
 
     function handleToggle(e) {
         todo.toggle();
-        submitTodo(todo);
+        setReload(!reload);
     }
 
     return (
         <li className={classNames({
             completed: todo.completed,
-            editing: editing.id === todo.id,
+            editing: editing.isEditing(todo),
         })}>
             <div className="view">
                 <input key={todo} className="toggle" type="checkbox" checked={todo.completed} onChange={handleToggle} />
-                <label onDoubleClick={() => startEdit(todo)}>{todo.title}</label>
+                <label onDoubleClick={() => editing.startEdit(todo)}>{todo.title}</label>
                 <button className="destroy" onClick={() => removeTodo(todo)} />
             </div>
-            <input className="edit" value={editing.text} onKeyUp={handleKeyUp} onBlur={handleSubmit} onChange={handleChange} />
+            <input className="edit"
+                ref={editor}
+                value={editing.editText}
+                onKeyUp={handleKeyUp}
+                onBlur={handleSubmit}
+                onChange={e => editing.updateEdit(todo, e.target.value)} />
         </li>
     );
 }
