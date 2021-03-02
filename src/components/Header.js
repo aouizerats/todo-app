@@ -13,9 +13,9 @@ function Header(props) {
     }
 
     return (
-        <header class="header">
+        <header className="header">
             <h1>{props.title}</h1>
-            <input class="new-todo" placeholder="What needs to be done?" autofocus onKeyUp={handleKeyUp} />
+            <input className="new-todo" placeholder="What needs to be done?" autoFocus onKeyUp={handleKeyUp} />
         </header>
     );
 }

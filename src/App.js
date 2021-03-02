@@ -24,7 +24,7 @@ function App() {
   }, []);
 
   return (
-    <section class="todoapp">
+    <section className="todoapp">
       <Header title="todos" state={state} setState={setState} />
       <TodoList state={state} setState={setState} />
       <Footer state={state} setState={setState} />

@@ -6,9 +6,9 @@ function Footer(props) {
     }
 
     return (
-        <footer class="footer">
-            <span class="todo-count"><strong>{props.state.todos.length}</strong> items left</span>
-            <button class="clear-completed" onClick={handleClearCompleted}>Clear completed</button>
+        <footer className="footer">
+            <span className="todo-count"><strong>{props.state.todos.length}</strong> items left</span>
+            <button className="clear-completed" onClick={handleClearCompleted}>Clear completed</button>
         </footer>
     );
 }

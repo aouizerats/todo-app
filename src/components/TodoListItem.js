@@ -47,12 +47,12 @@ function TodoListItem(props) {
             completed: props.todo.completed,
             editing: props.state.editing === props.todo.id,
         })}>
-            <div class="view">
-                <input key={props.todo} class="toggle" type="checkbox" checked={props.todo.completed} onClick={handleToggle} />
+            <div className="view">
+                <input key={props.todo} className="toggle" type="checkbox" checked={props.todo.completed} onChange={handleToggle} />
                 <label onDoubleClick={handleEdit}>{props.todo.title}</label>
-                <button class="destroy" onClick={handleRemove} />
+                <button className="destroy" onClick={handleRemove} />
             </div>
-            <input class="edit" value={props.state.editText} onKeyUp={handleKeyUp} onBlur={handleSubmit} onChange={handleChange} />
+            <input className="edit" value={props.state.editText} onKeyUp={handleKeyUp} onBlur={handleSubmit} onChange={handleChange} />
         </li>
     );
 }

@@ -10,10 +10,10 @@ function TodoList(props) {
     }
 
     return (
-        <section class="main">
-            <input id="toggle-all" class="toggle-all" type="checkbox" onChange={handleToggleAll} checked={allCompleted} />
-            <ul class="todo-list">
-                {props.state.todos.map(t => <TodoListItem todo={t} state={props.state} setState={props.setState} />)}
+        <section className="main">
+            <input id="toggle-all" className="toggle-all" type="checkbox" onChange={handleToggleAll} checked={allCompleted} />
+            <ul className="todo-list">
+                {props.state.todos.map(t => <TodoListItem key={t.id} todo={t} state={props.state} setState={props.setState} />)}
             </ul>
         </section>
     );
