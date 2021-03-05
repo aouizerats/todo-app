@@ -7,26 +7,13 @@ export function useApi(url, createData) {
     const [loading, setLoading] = useState(false);
     const counter = useRef(0);
 
-    function startLoading() {
-        counter.current++;
-        setLoading(counter.current > 0);
-    }
-
-    function endLoading() {
-        counter.current--;
-        setLoading(counter.current > 0);
-    }
-
     useEffect(() => {
-        async function fetchData() {
-            await fetch(url)
-                .then(response => response.json())
-                .then(json => setData(json.map(i => createData(i))))
-                .finally(() => endLoading());
-        }
+        setLoading((++counter.current) > 0);
 
-        startLoading();
-        fetchData();
+        fetch(url)
+            .then(response => response.json())
+            .then(json => setData(json.map(i => createData(i))))
+            .finally(() => setLoading((--counter.current) > 0));
     }, [reload]);
 
     return {
