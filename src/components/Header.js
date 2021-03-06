@@ -1,8 +1,13 @@
+import { useDispatch } from 'react-redux'
+import { addTodo } from '../redux/actions/todos'
 
-function Header({ title, createTodo, reload }) {
+function Header({ title }) {
+
+    const dispatch = useDispatch();
 
     function handleKeyUp(e) {
-        if (e.key === 'Enter' && createTodo(e.target.value.trim())) {
+        if (e.key === 'Enter') {
+            dispatch(addTodo(e.target.value));
             e.target.value = null;
         }
     }
@@ -10,7 +15,6 @@ function Header({ title, createTodo, reload }) {
     return (
         <header className="header">
             <h1>{title}</h1>
-            <button onClick={reload}>Reload</button>
             <div>
                 <input className="new-todo" placeholder="What needs to be done?" autoFocus onKeyUp={handleKeyUp} />
             </div>

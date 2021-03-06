@@ -1,15 +1,20 @@
-import { useEditing } from "../hooks/useEditing";
+import { useDispatch, useSelector } from 'react-redux';
+import { toggleAll } from '../redux/actions/todos'
 import TodoListItem from "./TodoListItem";
 
-function TodoList({ todos }) {
+function TodoList() {
 
-    const editing = useEditing();
+    const todos = useSelector(state => state.todos.todos);
+    const dispatch = useDispatch();
 
     return (
         <section className="main">
-            <input id="toggle-all" className="toggle-all" type="checkbox" onChange={todos.toggleAll} checked={todos.collection.every(t => t.completed)} />
+            <input id="toggle-all" className="toggle-all" type="checkbox"
+                onChange={(e) => dispatch(toggleAll())}
+                checked={todos.every(t => t.completed)} />
+
             <ul className="todo-list">
-                {todos.collection.map(t => <TodoListItem key={t.id} editing={editing} todo={t} removeTodo={todos.removeItem} />)}
+                {todos.map(t => <TodoListItem key={t.id} todo={t} />)}
             </ul>
         </section>
     );
