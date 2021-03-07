@@ -14,10 +14,10 @@ const todosReducer = (state = initalState, action) => {
             };
         }
         case actions.ADD_TODO: {
-            const title = action.payload;
+            const todo = action.payload;
             return {
                 ...state,
-                todos: [...state.todos, { title: title, completed: false, id: new Date().getMilliseconds() }]
+                todos: [...state.todos, todo]
             };
         }
         case actions.REMOVE_TODO: {

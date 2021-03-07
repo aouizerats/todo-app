@@ -1,3 +1,4 @@
+import axios from "axios";
 
 export const LOAD_TODOS = 'LOAD_TODOS';
 export const ADD_TODO = 'ADD_TODO';
@@ -7,30 +8,38 @@ export const TOGGLE_ALL = 'TOGGLE_ALL';
 export const CLEAR_COMPLETED = 'CLEAR_COMPLETED';
 export const END_EDIT = 'END_EDIT';
 
+const BASE_URL = 'http://localhost:8000/todos';
+
 export const loadTodos = () => {
     return dispatch => {
-        fetch('https://jsonplaceholder.typicode.com/todos')
-            .then(res => res.json())
-            .then(todos =>
-                dispatch({
-                    type: LOAD_TODOS,
-                    payload: todos
-                })
-            );
+        axios.get(BASE_URL)
+            .then(response => dispatch({
+                type: LOAD_TODOS,
+                payload: response.data
+            }))
+            .catch(error => console.log(error));
     };
 }
 
 export const addTodo = title => {
-    return {
-        type: ADD_TODO,
-        payload: title
+    return dispatch => {
+        axios.post(BASE_URL, { title: title, completed: false })
+            .then(response => dispatch({
+                type: ADD_TODO,
+                payload: response.data
+            }))
+            .catch(error => console.log(error));
     };
 }
 
 export const removeTodo = id => {
-    return {
-        type: REMOVE_TODO,
-        payload: id
+    return dispatch => {
+        axios.delete(BASE_URL + `/${id}`)
+            .then(response => dispatch({
+                type: REMOVE_TODO,
+                payload: id
+            }))
+            .catch(error => console.log(error));
     };
 }
 
