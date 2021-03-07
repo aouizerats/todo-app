@@ -1,14 +1,13 @@
 import { useEffect, useRef, useState } from 'react'
-import { useDispatch, useSelector } from 'react-redux';
+import { connect } from 'react-redux';
 import { toggleTodo, removeTodo, startEdit, endEdit, cancelEdit } from '../redux/actions/todos'
 import classNames from "classnames";
 
-function TodoListItem({ todo }) {
+const TodoListItem = ({ todo, toggleTodo, removeTodo, endEdit }) => {
 
     const [editText, setEditText] = useState("");
-    const editId = useSelector(state => state.todos.edit);
+    const [isEditing, setIsEditing] = useState(false);
     const editor = useRef();
-    const dispatch = useDispatch();
 
     useEffect(() => {
         setEditText(todo.title);
@@ -17,14 +16,15 @@ function TodoListItem({ todo }) {
             editor.current.focus();
             editor.current.setSelectionRange(0, editor.current.value.length)
         }
-    }, [editId === todo.id])
+    }, [isEditing])
 
     function handleSubmit(e) {
         var val = editText.trim();
         if (val) {
-            dispatch(endEdit(todo.id, editText));
-        } else if (editId === todo.id) {
-            dispatch(removeTodo(todo.id));
+            setIsEditing(false);
+            endEdit(todo.id, editText);
+        } else if (isEditing) {
+            removeTodo(todo.id);
         }
     }
 
@@ -34,21 +34,21 @@ function TodoListItem({ todo }) {
         }
 
         if (e.key === 'Escape') {
-            dispatch(cancelEdit());
+            setIsEditing(false);
         }
     }
 
     return (
         <li className={classNames({
             completed: todo.completed,
-            editing: editId === todo.id,
+            editing: isEditing,
         })}>
             <div className="view">
                 <input key={todo} className="toggle" type="checkbox"
                     checked={todo.completed}
-                    onChange={() => dispatch(toggleTodo(todo.id))} />
-                <label onDoubleClick={() => dispatch(startEdit(todo.id))}>{todo.title}</label>
-                <button className="destroy" onClick={() => dispatch(removeTodo(todo.id))} />
+                    onChange={() => toggleTodo(todo.id)} />
+                <label onDoubleClick={() => setIsEditing(true)}>{todo.title}</label>
+                <button className="destroy" onClick={() => removeTodo(todo.id)} />
             </div>
             <input className="edit"
                 ref={editor}
@@ -60,4 +60,4 @@ function TodoListItem({ todo }) {
     );
 }
 
-export default TodoListItem;
+export default connect(null, { toggleTodo, removeTodo, endEdit })(TodoListItem);

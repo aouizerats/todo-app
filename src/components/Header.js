@@ -1,13 +1,11 @@
-import { useDispatch } from 'react-redux'
+import { connect } from 'react-redux'
 import { addTodo } from '../redux/actions/todos'
 
-function Header({ title }) {
-
-    const dispatch = useDispatch();
+const Header = ({ title, addTodo }) => {
 
     function handleKeyUp(e) {
         if (e.key === 'Enter') {
-            dispatch(addTodo(e.target.value));
+            addTodo(e.target.value);
             e.target.value = null;
         }
     }
@@ -22,4 +20,4 @@ function Header({ title }) {
     );
 }
 
-export default Header;
+export default connect(null, { addTodo })(Header);
