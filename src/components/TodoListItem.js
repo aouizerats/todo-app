@@ -19,12 +19,14 @@ const TodoListItem = ({ todo, toggleTodo, removeTodo, endEdit }) => {
     }, [isEditing])
 
     function handleSubmit(e) {
-        var val = editText.trim();
-        if (val) {
-            setIsEditing(false);
-            endEdit(todo.id, editText);
-        } else if (isEditing) {
-            removeTodo(todo.id);
+        if (isEditing) {
+            var val = editText.trim();
+            if (val) {
+                setIsEditing(false);
+                endEdit(todo.id, editText);
+            } else {
+                removeTodo(todo.id);
+            }
         }
     }
 
@@ -46,7 +48,7 @@ const TodoListItem = ({ todo, toggleTodo, removeTodo, endEdit }) => {
             <div className="view">
                 <input key={todo} className="toggle" type="checkbox"
                     checked={todo.completed}
-                    onChange={() => toggleTodo(todo.id)} />
+                    onChange={() => toggleTodo(todo.id, todo.completed)} />
                 <label onDoubleClick={() => setIsEditing(true)}>{todo.title}</label>
                 <button className="destroy" onClick={() => removeTodo(todo.id)} />
             </div>

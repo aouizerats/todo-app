@@ -43,10 +43,14 @@ export const removeTodo = id => {
     };
 }
 
-export const toggleTodo = id => {
-    return {
-        type: TOGGLE_TODO,
-        payload: id
+export const toggleTodo = (id, completed) => {
+    return dispatch => {
+        axios.patch(BASE_URL + `/${id}`, { completed: !completed })
+            .then(response => dispatch({
+                type: TOGGLE_TODO,
+                payload: { id, completed }
+            }))
+            .catch(error => console.log(error));
     };
 }
 
@@ -54,17 +58,41 @@ export const toggleAll = () => {
     return {
         type: TOGGLE_ALL
     };
+
+    // return (dispatch, getState) => {
+    //     const todos = getState().todos;
+    //     const completed = todos.todos.every(t => t.completed);
+    //     axios.all(todos.todos.filter(t => t.completed === completed).map(t => axios.patch(BASE_URL + `/${t.id}`, { completed: !completed })))
+    //         .then(response => dispatch({
+    //             type: TOGGLE_ALL,
+    //             payload: completed
+    //         }))
+    //         .catch(error => console.log(error));
+    // }
 }
 
 export const clearCompleted = () => {
     return {
         type: CLEAR_COMPLETED
     };
+
+    // return (dispatch, getState) => {
+    //     const todos = getState().todos;
+    //     axios.all(todos.todos.filter(t => t.completed).map(t => axios.delete(BASE_URL + `/${t.id}`)))
+    //         .then(axios.spread, () => dispatch({
+    //             type: CLEAR_COMPLETED
+    //         }))
+    //         .catch(error => console.log(error));
+    // };
 }
 
 export const endEdit = (id, text) => {
-    return {
-        type: END_EDIT,
-        payload: { id, text }
-    }
+    return dispatch => {
+        axios.patch(BASE_URL + `/${id}`, { title: text })
+            .then(response => dispatch({
+                type: END_EDIT,
+                payload: { id, text }
+            }))
+            .catch(error => console.log(error));
+    };
 }

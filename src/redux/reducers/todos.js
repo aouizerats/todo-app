@@ -28,10 +28,9 @@ const todosReducer = (state = initalState, action) => {
             };
         }
         case actions.TOGGLE_TODO: {
-            const id = action.payload;
+            const { id, completed } = action.payload;
             return {
-                ...state,
-                todos: state.todos.map(todo => todo.id === id ? { ...todo, completed: !todo.completed } : todo)
+                ...state, todos: state.todos.map(todo => todo.id === id ? { ...todo, completed: !completed } : todo)
             };
         }
         case actions.TOGGLE_ALL: {
