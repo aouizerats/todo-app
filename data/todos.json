@@ -1,16 +1,6 @@
 {
   "todos": [
     {
-      "title": "Davidf",
-      "completed": false,
-      "id": 1
-    },
-    {
-      "title": "Tamar",
-      "completed": false,
-      "id": 2
-    },
-    {
       "title": "Ruth",
       "completed": false,
       "id": 3
