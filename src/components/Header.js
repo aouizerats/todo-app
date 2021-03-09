@@ -1,8 +1,12 @@
+import { useContext } from "react";
+import { TodosContext } from "../providers/TodosContext";
 
-function Header({ title, createTodo, reload }) {
+function Header({ title }) {
+
+    const context = useContext(TodosContext);
 
     function handleKeyUp(e) {
-        if (e.key === 'Enter' && createTodo(e.target.value.trim())) {
+        if (e.key === 'Enter' && context.addTodo(e.target.value.trim())) {
             e.target.value = null;
         }
     }
@@ -10,7 +14,7 @@ function Header({ title, createTodo, reload }) {
     return (
         <header className="header">
             <h1>{title}</h1>
-            <button onClick={reload}>Reload</button>
+            <button >Reload</button>
             <div>
                 <input className="new-todo" placeholder="What needs to be done?" autoFocus onKeyUp={handleKeyUp} />
             </div>
@@ -19,3 +23,5 @@ function Header({ title, createTodo, reload }) {
 }
 
 export default Header;
+
+// onClick={reload}

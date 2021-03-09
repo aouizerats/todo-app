@@ -1,9 +1,10 @@
 import classNames from "classnames";
-import { useEffect, useRef, useState } from 'react'
+import { useContext, useEffect, useRef, useState } from 'react'
+import { TodosContext } from "../providers/TodosContext";
 
-function TodoListItem({ todo, removeTodo }) {
+function TodoListItem({ todo }) {
 
-    const [reload, setReload] = useState(false);
+    const context = useContext(TodosContext);
     const [edit, setEdit] = useState({ editing: false, editText: "" });
     const editor = useRef();
 
@@ -25,7 +26,7 @@ function TodoListItem({ todo, removeTodo }) {
             todo.title = val;
             setEdit({ ...edit, editing: false, editText: "" });
         } else if (edit.editing) {
-            removeTodo(todo);
+            context.removeTodo(todo);
         }
     }
 
@@ -39,20 +40,15 @@ function TodoListItem({ todo, removeTodo }) {
         }
     }
 
-    function handleToggle(e) {
-        todo.toggle();
-        setReload(!reload);
-    }
-
     return (
         <li className={classNames({
             completed: todo.completed,
             editing: edit.editing,
         })}>
             <div className="view">
-                <input key={todo} className="toggle" type="checkbox" checked={todo.completed} onChange={handleToggle} />
+                <input key={todo} className="toggle" type="checkbox" checked={todo.completed} onChange={() => context.toggleTodo(todo.id)} />
                 <label onDoubleClick={() => setEdit({ ...edit, editing: true, editText: todo.title })}>{todo.title}</label>
-                <button className="destroy" onClick={() => removeTodo(todo)} />
+                <button className="destroy" onClick={() => context.removeTodo(todo)} />
             </div>
             <input className="edit"
                 ref={editor}
